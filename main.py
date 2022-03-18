@@ -1,5 +1,9 @@
 import requests
+from datetime import datetime
 
+now = datetime.now()
+today = now.today()
+date = str(today.date())
 
 
 with open("../api/nutritionix") as api_data:
@@ -10,7 +14,7 @@ clean_api = []
 for n_line in neutr_api:
     clean_api.append(n_line.strip("\n"))
 
-print(clean_api)
+
 
 xapp = clean_api[0]
 xappkey = clean_api[1]
@@ -37,7 +41,7 @@ exercise_data = requests.post(url=EXERZISE_ENDPOINT, headers=head, json=params)
 
 exercise_return_data = exercise_data.json
 
-print(exercise_return_data()["exercises"])
+
 
 activity = exercise_return_data()["exercises"][0]["user_input"]
 duration = exercise_return_data()["exercises"][0]["duration_min"]
@@ -45,6 +49,30 @@ cals = exercise_return_data()["exercises"][0]["nf_calories"]
 
 
 
-print(activity, duration, cals)
+with open("../api/sheety") as sheety_data:
+    sheety_api = sheety_data.readlines()
+
+clean_sheety = []
+
+for n_line in sheety_api:
+    clean_sheety.append(n_line.strip("\n"))
 
 
+
+data = {
+    "sheet1": {
+
+    "date": date,
+    "time": "23",
+    "exercise": "running",
+    "duration": "3",
+    "calories": "234"
+}
+}
+
+google_sheet = requests.post(url=clean_sheety[3], json=data)
+
+
+
+
+print(google_sheet.text)
