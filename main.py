@@ -2,9 +2,8 @@ import requests
 from datetime import datetime
 
 now = datetime.now()
-today = now.today()
-date = str(today.date())
-
+date = now.strftime("%d/%m/%Y")
+t = now.strftime("%H:%M:%S")
 
 with open("../api/nutritionix") as api_data:
     neutr_api = api_data.readlines()
@@ -29,11 +28,11 @@ head = {
 EXERZISE_ENDPOINT = "https://trackapi.nutritionix.com/v2/natural/exercise"
 
 params =  {
-     "query":"ran 3 hours",
-     "gender":"female",
-     "weight_kg":72.5,
-     "height_cm":167.64,
-     "age":30
+     "query":input("What did you do today?:"),
+     "gender":"male",
+     "weight_kg":110.5,
+     "height_cm":187.64,
+     "age":35
     }
 
 
@@ -63,16 +62,13 @@ data = {
     "sheet1": {
 
     "date": date,
-    "time": "23",
-    "exercise": "running",
-    "duration": "3",
-    "calories": "234"
+    "time": t,
+    "exercise": activity,
+    "duration": duration,
+    "calories": cals
 }
 }
 
 google_sheet = requests.post(url=clean_sheety[3], json=data)
 
 
-
-
-print(google_sheet.text)
